@@ -3,7 +3,11 @@ package com.meeseek.springbootmall.dao;
 import com.meeseek.springbootmall.dto.ProductRequest;
 import com.meeseek.springbootmall.model.Product;
 
+import java.util.List;
+
 public interface ProductDao {
+    List<Product> getProducts();
+
     Product getProductById(Integer id);
 
     Integer createProduct(ProductRequest productRequest);
