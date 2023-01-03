@@ -1,5 +1,6 @@
 package com.meeseek.springbootmall.controller;
 
+import com.meeseek.springbootmall.constant.ProductCategory;
 import com.meeseek.springbootmall.dto.ProductRequest;
 import com.meeseek.springbootmall.model.Product;
 import com.meeseek.springbootmall.service.ProductService;
@@ -19,8 +20,11 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ) {
+        List<Product> productList = productService.getProducts(category, search);
 
         return ResponseEntity.status(200).body(productList);
     }
