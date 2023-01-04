@@ -3,10 +3,28 @@ package com.meeseek.springbootmall.dto;
 import com.meeseek.springbootmall.constant.ProductCategory;
 
 public class ProductQueryParams {
-    ProductCategory category;
-    String search;
-    String orderBy;
-    String sort;
+    private ProductCategory category;
+    private String search;
+    private String orderBy;
+    private String sort;
+    private Integer limit;
+    private Integer offset;
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
 
     public String getOrderBy() {
         return orderBy;
@@ -24,19 +42,19 @@ public class ProductQueryParams {
         this.sort = sort;
     }
 
-    public ProductCategory getCategory() {
-        return category;
+    public Integer getLimit() {
+        return limit;
     }
 
-    public void setCategory(ProductCategory category) {
-        this.category = category;
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
-    public String getSearch() {
-        return search;
+    public Integer getOffset() {
+        return offset;
     }
 
-    public void setSearch(String search) {
-        this.search = search;
+    public void setOffset(Integer offset) {
+        this.offset = offset;
     }
 }
