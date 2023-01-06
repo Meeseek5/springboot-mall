@@ -1,6 +1,7 @@
 package com.meeseek.springbootmall.service.impl;
 
 import com.meeseek.springbootmall.dao.UserDao;
+import com.meeseek.springbootmall.dto.UserLoginRequest;
 import com.meeseek.springbootmall.dto.UserRegisterRequest;
 import com.meeseek.springbootmall.model.User;
 import com.meeseek.springbootmall.service.UserService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.lang.module.ResolutionException;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -37,5 +40,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer userId) {
         return userDao.getUserById(userId);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+
+        if(user == null) {
+            log.warn("該 email {} 尚被註冊", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if(user.getPassword().equals(userLoginRequest.getPassword())) {
+            return user;
+        } else {
+            log.warn("email {} 密碼不正確", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }
