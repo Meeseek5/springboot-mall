@@ -5,6 +5,7 @@ import com.meeseek.springbootmall.dao.ProductDao;
 import com.meeseek.springbootmall.dao.UserDao;
 import com.meeseek.springbootmall.dto.BuyItem;
 import com.meeseek.springbootmall.dto.CreateOrderRequest;
+import com.meeseek.springbootmall.dto.OrderQueryParams;
 import com.meeseek.springbootmall.model.Order;
 import com.meeseek.springbootmall.model.OrderItem;
 import com.meeseek.springbootmall.model.Product;
@@ -97,5 +98,24 @@ public class OrderServiceImpl implements OrderService {
         orderDao.createOrderItems(orderId, orderItemList);
 
         return  orderId;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        // 針對每個 order 設定 order item
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
     }
 }
