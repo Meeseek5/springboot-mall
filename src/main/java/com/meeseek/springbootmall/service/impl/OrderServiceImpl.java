@@ -25,6 +25,7 @@ import java.util.List;
 
 @Component
 public class OrderServiceImpl implements OrderService {
+    private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     private OrderDao orderDao;
@@ -34,8 +35,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UserDao userDao;
-
-    private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Override
     public Order getOrderById(Integer orderId) {
@@ -72,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             } else if (product.getStock() < buyItem.getQuantity()) {
                 log.warn("商品 {} 庫存量不足，無法購買。剩餘庫存 {}，欲購買數量 {}",
-                        product.getProductId(), product.getStock(), buyItem.getQuantity());
+                        buyItem.getProductId(), product.getStock(), buyItem.getQuantity());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
 

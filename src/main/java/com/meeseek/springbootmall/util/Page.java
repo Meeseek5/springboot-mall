@@ -6,7 +6,7 @@ public class Page<T> {
 
     private Integer limit;
     private Integer offset;
-    private Integer Total;
+    private Integer total;
     private List<T> results;
 
     public Integer getLimit() {
@@ -26,11 +26,11 @@ public class Page<T> {
     }
 
     public Integer getTotal() {
-        return Total;
+        return total;
     }
 
     public void setTotal(Integer total) {
-        Total = total;
+        this.total = total;
     }
 
     public List<T> getResults() {

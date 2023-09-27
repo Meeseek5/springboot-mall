@@ -26,7 +26,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Integer countOrder(OrderQueryParams orderQueryParams) {
-        String sql = "SELECT count(*) FROM `order` WHERE 1=1";
+        String sql = "SELECT count(*) FROM `order` WHERE 1=1 ";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -40,7 +40,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrders(OrderQueryParams orderQueryParams) {
-        String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE 1=1";
+        String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE 1=1 ";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -48,10 +48,10 @@ public class OrderDaoImpl implements OrderDao {
         sql = addFilteringSql(sql, map, orderQueryParams);
 
         // 排序
-        sql = sql + " ORDER BY created_date DESC";
+        sql = sql + "ORDER BY created_date DESC ";
 
         // 分頁
-        sql = sql + " LIMIT :limit OFFSET :offset";
+        sql = sql + "LIMIT :limit OFFSET :offset ";
         map.put("limit", orderQueryParams.getLimit());
         map.put("offset", orderQueryParams.getOffset());
 
@@ -63,7 +63,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order getOrderById(Integer orderId) {
         String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date " +
-                     "FROM `order` WHERE order_id = :orderId";
+                     "FROM `order` WHERE order_id = :orderId ";
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderId", orderId);
@@ -79,10 +79,10 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Integer orderId) {
-        String sql = "SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url "+
+        String sql = "SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url " +
                      "FROM order_item as oi " +
                      "LEFT JOIN product as p ON oi.product_id = p.product_id " +
-                     "WHERE oi.order_id = :orderId";
+                     "WHERE oi.order_id = :orderId ";
 
         Map<String, Object> map = new HashMap<>();
         map.put("orderId", orderId);
@@ -94,8 +94,8 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Integer createOrder(Integer userId, Integer totalAmount) {
-        String sql = "INSERT INTO `order`(user_id, total_amount, created_date, last_modified_date) " +
-                     "VALUES(:userId, :totalAmount, :createdDate, :lastModifiedDate)";
+        String sql = "INSERT INTO `order` (user_id, total_amount, created_date, last_modified_date) " +
+                     "VALUES (:userId, :totalAmount, :createdDate, :lastModifiedDate)";
 
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
@@ -109,7 +109,7 @@ public class OrderDaoImpl implements OrderDao {
 
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
 
-        int orderId = keyHolder.getKey().intValue();
+        Integer orderId = keyHolder.getKey().intValue();
 
         return orderId;
     }
@@ -137,7 +137,7 @@ public class OrderDaoImpl implements OrderDao {
 
     private String addFilteringSql(String sql, Map<String, Object> map, OrderQueryParams orderQueryParams) {
         if (orderQueryParams.getUserId() != null) {
-            sql += " AND user_id = :userId";
+            sql += "AND user_id = :userId ";
             map.put("userId", orderQueryParams.getUserId());
         }
 

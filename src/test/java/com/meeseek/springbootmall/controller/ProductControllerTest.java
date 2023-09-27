@@ -3,6 +3,7 @@ package com.meeseek.springbootmall.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.meeseek.springbootmall.constant.ProductCategory;
 import com.meeseek.springbootmall.dto.ProductRequest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +30,7 @@ public class ProductControllerTest {
 
     // 查詢商品
     @Test
+    @DisplayName("查詢成功")
     public void getProduct_success() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products/{productId}", 1);
@@ -47,6 +49,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("查詢不到商品")
     public void getProduct_notFound() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products/{productId}", 20000);
@@ -58,6 +61,7 @@ public class ProductControllerTest {
     // 創建商品
     @Transactional
     @Test
+    @DisplayName("創建成功")
     public void createProduct_success() throws Exception {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -66,6 +70,7 @@ public class ProductControllerTest {
         productRequest.setPrice(100);
         productRequest.setStock(2);
 
+        // 將 request 物件轉為 json 字串
         String json = objectMapper.writeValueAsString(productRequest);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -87,6 +92,7 @@ public class ProductControllerTest {
 
     @Transactional
     @Test
+    @DisplayName("創建 - 少傳指定參數")
     public void createProduct_illegalArgument() throws Exception {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -105,6 +111,7 @@ public class ProductControllerTest {
     // 更新商品
     @Transactional
     @Test
+    @DisplayName("更新成功")
     public void updateProduct_success() throws Exception {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -134,6 +141,7 @@ public class ProductControllerTest {
 
     @Transactional
     @Test
+    @DisplayName("更新 - 少傳指定參數")
     public void updateProduct_illegalArgument() throws Exception {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -152,6 +160,7 @@ public class ProductControllerTest {
 
     @Transactional
     @Test
+    @DisplayName("更新不存在的商品")
     public void updateProduct_productNotFound() throws Exception {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("test food product");
@@ -174,6 +183,7 @@ public class ProductControllerTest {
     // 刪除商品
     @Transactional
     @Test
+    @DisplayName("刪除成功")
     public void deleteProduct_success() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/products/{productId}", 5);
@@ -184,6 +194,7 @@ public class ProductControllerTest {
 
     @Transactional
     @Test
+    @DisplayName("刪除成功 - 本就不存在的商品")
     public void deleteProduct_deleteNonExistingProduct() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete("/products/{productId}", 20000);
@@ -194,7 +205,8 @@ public class ProductControllerTest {
 
     // 查詢商品列表
     @Test
-    public void getProducts() throws Exception {
+    @DisplayName("查詢商品列表成功")
+    public void getProducts_success() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products");
 
@@ -208,6 +220,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("查詢商品 - filtering")
     public void getProducts_filtering() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products")
@@ -223,6 +236,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("查詢商品 - sorting")
     public void getProducts_sorting() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products")
@@ -244,6 +258,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("查詢商品 - pagination")
     public void getProducts_pagination() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/products")

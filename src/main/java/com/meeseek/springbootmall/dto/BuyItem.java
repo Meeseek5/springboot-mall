@@ -5,10 +5,10 @@ import javax.validation.constraints.NotNull;
 public class BuyItem {
 
     @NotNull
-    Integer productId;
+    private Integer productId;
 
     @NotNull
-    Integer quantity;
+    private Integer quantity;
 
     public Integer getProductId() {
         return productId;

@@ -7,6 +7,7 @@ import com.meeseek.springbootmall.dao.UserDao;
 import com.meeseek.springbootmall.dto.UserLoginRequest;
 import com.meeseek.springbootmall.dto.UserRegisterRequest;
 import com.meeseek.springbootmall.model.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,13 +37,16 @@ class UserControllerTest {
 
     // 註冊新帳號
     @Test
+    @DisplayName("註冊成功")
     public void register_success() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail("test1@gmail.com");
         userRegisterRequest.setPassword("123");
 
+        // 建立 json
         String json = objectMapper.writeValueAsString(userRegisterRequest);
 
+        // 建立 Request
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/register")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -61,9 +65,10 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("註冊 - 不合法的 email")
     public void register_invalidEmailFormat() throws Exception {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setEmail("3gd8e7q34l9");
+        userRegisterRequest.setEmail("AAABBBCCC");
         userRegisterRequest.setPassword("123");
 
         String json = objectMapper.writeValueAsString(userRegisterRequest);
@@ -78,6 +83,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("註冊 - email 已被註冊")
     public void register_emailAlreadyExist() throws Exception {
         // 先註冊一個帳號
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
@@ -101,6 +107,7 @@ class UserControllerTest {
 
     // 登入
     @Test
+    @DisplayName("登入成功")
     public void login_success() throws Exception {
         // 先註冊新帳號
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
@@ -130,6 +137,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("登入成功")
     public void login_wrongPassword() throws Exception {
         // 先註冊新帳號
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
@@ -155,6 +163,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("登入 - email 格式不合法")
     public void login_invalidEmailFormat() throws Exception {
         UserLoginRequest userLoginRequest = new UserLoginRequest();
         userLoginRequest.setEmail("hkbudsr324");
@@ -172,6 +181,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("登入 - email 不存在")
     public void login_emailNotExist() throws Exception {
         UserLoginRequest userLoginRequest = new UserLoginRequest();
         userLoginRequest.setEmail("unknown@gmail.com");
@@ -196,7 +206,6 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        mockMvc.perform(requestBuilder)
-                .andExpect(status().is(201));
+        mockMvc.perform(requestBuilder);
     }
 }

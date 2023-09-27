@@ -26,7 +26,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer countProduct(ProductQueryParams productQueryParams) {
-        String sql = "SELECT count(*) FROM product WHERE 1=1";
+        String sql = "SELECT count(*) FROM product WHERE 1=1 ";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -42,7 +42,7 @@ public class ProductDaoImpl implements ProductDao {
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         String sql = "SELECT product_id, product_name, category, image_url, price, " +
                      "stock, description, created_date, last_modified_date " +
-                     "FROM product WHERE 1=1";
+                     "FROM product WHERE 1=1 ";
 
         Map<String, Object> map = new HashMap<>();
 
@@ -50,10 +50,12 @@ public class ProductDaoImpl implements ProductDao {
         sql = addFilteringSql(sql, map, productQueryParams);
 
         // 排序
-        sql = sql + " ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
+        // order by 不能使用 map 替換參數
+        // 必須使用字串串接
+        sql = sql + "ORDER BY " + productQueryParams.getOrderBy() + " " + productQueryParams.getSort();
 
         // 分頁
-        sql = sql + " LIMIT :limit OFFSET :offset";
+        sql += " LIMIT :limit OFFSET :offset ";
         map.put("limit", productQueryParams.getLimit());
         map.put("offset", productQueryParams.getOffset());
 
@@ -65,8 +67,8 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public Product getProductById(Integer productId) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date " +
-                "FROM product " +
-                "WHERE product_id = :productId";
+                     "FROM product " +
+                     "WHERE product_id = :productId";
 
         // 放入參數
         Map<String, Object> map = new HashMap<>();
@@ -134,7 +136,7 @@ public class ProductDaoImpl implements ProductDao {
     @Override
     public void updateStock(Integer productId, Integer stock) {
         String sql = "UPDATE product SET stock = :stock, last_modified_date = :lastModifiedDate " +
-                     "WHERE product_id = :productId";
+                     "WHERE product_id = :productId ";
 
         Map<String, Object> map = new HashMap<>();
         map.put("stock", stock);
@@ -146,7 +148,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public void deleteProductById(Integer productId) {
-        String sql = "DELETE FROM product WHERE product_id = :productId";
+        String sql = "DELETE FROM product WHERE product_id = :productId ";
 
         Map<String, Object> map = new HashMap<>();
         map.put("productId", productId);
@@ -158,12 +160,12 @@ public class ProductDaoImpl implements ProductDao {
     // 查詢條件
     private String addFilteringSql(String sql, Map<String, Object> map, ProductQueryParams productQueryParams) {
         if(productQueryParams.getCategory() != null) {
-            sql = sql + " AND category = :category";
+            sql += " AND category = :category ";
             map.put("category", productQueryParams.getCategory().name());
         }
 
         if(productQueryParams.getSearch() != null) {
-            sql = sql + " AND product_name LIKE :search";
+            sql += " AND product_name LIKE :search ";
             map.put("search", "%" + productQueryParams.getSearch() + "%");
         }
 

@@ -39,6 +39,8 @@ public class ProductController {
             @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
             @RequestParam(defaultValue = "0") @Min(0) Integer offset
     ) {
+        // 運用 Dto 接前端傳來的參數
+        // 打包好再傳進 Service/Dao 增加可讀性與維護性
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
